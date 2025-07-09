@@ -1,0 +1,17 @@
+{
+  "name": "network-config-simulator",
+  "version": "1.0.0",
+  "description": "A full-stack application to simulate network device configuration management.",
+  "main": "index.js",
+  "scripts": {
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

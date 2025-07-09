@@ -1,0 +1,11 @@
+# Node.js
+node_modules/
+.env
+
+# npm package manager
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# OS generated files
+.DS_Store
+.vscode/ # VSCode settings

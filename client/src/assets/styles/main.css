@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+/* Custom scrollbar for pre tags - optional but good for long configs */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px; /* For horizontal scrollbar */
+  width: 8px; /* For vertical scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #333; /* Dark track background */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #666; /* Gray thumb */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Lighter gray on hover */
+}
