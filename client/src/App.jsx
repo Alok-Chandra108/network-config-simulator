@@ -1,28 +1,86 @@
 // client/src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom'; // Import Outlet for nested routes
+import { useAuth } from './contexts/AuthContext';
+import { ToastContainer } from 'react-toastify'; // <--- NEW IMPORT 1
+import 'react-toastify/dist/ReactToastify.css';
+
 import HomePage from './pages/HomePage';
 import DeviceDetailPage from './pages/DeviceDetailPage';
 import AddDevicePage from './pages/AddDevicePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
+import UnauthorizedPage from './pages/UnauthorizedPage'; // <--- NEW IMPORT
+import AdminDashboardPage from './pages/AdminDashboardPage'; 
+
+
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import LoadingSpinner from './components/common/LoadingSpinner';
+
+// PrivateRoute Component: Protects routes that require authentication AND specific roles
+// It will now take an 'allowedRoles' array as a prop
+const PrivateRoute = ({ allowedRoles }) => { // <--- ADD allowedRoles PROP
+  const { isAuthenticated, user, loading } = useAuth(); // <--- GET user FROM CONTEXT
+
+  if (loading) {
+    return <LoadingSpinner />; // Show spinner during initial authentication check
+  }
+
+  // If user is not authenticated, redirect to the login page
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If allowedRoles are specified, check if the user has at least one of them
+  if (allowedRoles && allowedRoles.length > 0) {
+    const hasRequiredRole = allowedRoles.some(role => user?.roles?.includes(role)); // Check if user has ANY of the allowed roles
+    if (!hasRequiredRole) {
+      // If authenticated but doesn't have the required role, redirect to unauthorized page
+      return <Navigate to="/unauthorized" replace />; // <--- NEW REDIRECT
+    }
+  }
+
+  // If authenticated and has required roles (or no roles were specified for this route), render the children
+  return <Outlet />; // <--- Use Outlet for nested routes pattern
+};
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen bg-gray-50"> {/* Changed bg-gray-100 to bg-gray-50 */}
-        <Header />
-        <main className="flex-grow container mx-auto px-4 py-8"> {/* Adjusted padding */}
-          <Routes>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} /> {/* <--- NEW UNAUTHORIZED ROUTE */}
+          <Route path="*" element={<NotFoundPage />} />
+
+          {/* Protected Routes - Now using nested routes with PrivateRoute */}
+          {/* Example: All users (admin, user, viewer) can see HomePage and DeviceDetailPage */}
+          <Route element={<PrivateRoute allowedRoles={['admin', 'user', 'viewer']} />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/device/:id" element={<DeviceDetailPage />} />
+          </Route>
+
+          {/* Example: Only Admin and regular Users can add devices */}
+          <Route element={<PrivateRoute allowedRoles={['admin', 'user']} />}>
             <Route path="/device/add" element={<AddDevicePage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+          </Route>
+
+          {/* Example: Admin-only route (if you add one later) */}
+          <Route element={<PrivateRoute allowedRoles={['admin']} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+          </Route>
+         
+
+        </Routes>
+      </main>
+      <Footer />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+    </div>
   );
 }
 

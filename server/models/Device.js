@@ -6,13 +6,13 @@ const deviceSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Please add a device name'],
-      unique: true, // Device names should be unique
+      unique: true,
       trim: true,
     },
     type: {
       type: String,
       required: [true, 'Please specify a device type'],
-      enum: ['Router', 'Switch', 'Firewall', 'Load Balancer', 'Server', 'Other'], // Enforce specific types
+      enum: ['Router', 'Switch', 'Firewall', 'Load Balancer', 'Server', 'Other', 'Light', 'Sensor', 'Camera'],
     },
     ipAddress: {
       type: String,
@@ -20,7 +20,7 @@ const deviceSchema = new mongoose.Schema(
         /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
         'Please enter a valid IP address',
       ],
-      default: null, // Allow null if not set, and not necessarily unique
+      default: null,
     },
     location: {
       type: String,
@@ -34,43 +34,39 @@ const deviceSchema = new mongoose.Schema(
     },
     isOnline: {
       type: Boolean,
-      default: false, // Assume offline until checked
+      default: false,
     },
     lastPingTime: {
       type: Date,
-      default: null, // When the last ping check was performed
-    },
-    lastPingLatency: {
-      type: Number, // Latency in milliseconds
       default: null,
     },
-    // Reference to the current configuration document
+    lastPingLatency: {
+      type: Number,
+      default: null,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     currentConfiguration: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Configuration', // Refers to the Configuration model
-      default: null, // No current configuration initially
+      ref: 'Configuration',
+      default: null,
     },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt fields automatically
-    toObject: { virtuals: true, getters: true }, // Ensure virtuals and getters are included when converting to object
-    toJSON: { virtuals: true, getters: true }   // Ensure virtuals and getters are included when converting to JSON
+    timestamps: true,
+    toObject: { virtuals: true, getters: true },
+    toJSON: { virtuals: true, getters: true }
   }
 );
 
-// This pre-hook ensures that 'currentConfiguration' is automatically populated
-// whenever a find query (e.g., find, findOne, findById) is executed on Device model.
 deviceSchema.pre(/^find/, function(next) {
   this.populate('currentConfiguration');
+  this.populate('owner', 'username email');
   next();
 });
-
-// Middleware to handle currentConfiguration when a device is deleted
-// (Optional but good practice for cleanup - we can implement this later if needed)
-// deviceSchema.pre('remove', async function(next) {
-//   await this.model('Configuration').deleteMany({ deviceId: this._id });
-//   next();
-// });
 
 const Device = mongoose.model('Device', deviceSchema);
 

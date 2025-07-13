@@ -3,8 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 
-
-function DeviceCard({ device, onDelete }) {
+// Add 'canDelete' to the destructured props
+function DeviceCard({ device, onDelete, canDelete }) {
   // Determine status indicator color and text based on isOnline property
   const statusColor = device.isOnline ? 'bg-green-500' : 'bg-red-500';
   const statusText = device.isOnline ? 'Online' : 'Offline';
@@ -36,13 +36,16 @@ function DeviceCard({ device, onDelete }) {
         >
           View Details
         </Link>
-        <Button
-          onClick={() => onDelete(device._id)}
-          variant="danger"
-          className="w-full sm:w-auto"
-        >
-          Delete
-        </Button>
+        {/* Conditionally render the Delete button only if canDelete is true */}
+        {canDelete && (
+          <Button
+            onClick={() => onDelete(device._id)}
+            variant='danger'
+            className="w-full sm:w-auto"
+          >
+            Delete
+          </Button>
+        )}
       </div>
     </div>
   );
