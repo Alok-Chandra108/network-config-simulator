@@ -10,9 +10,9 @@ const {
   deleteDevice,
   checkDeviceStatus
 } = require('../controllers/deviceController');
-const { protect } = require('../middleware/authMiddleware'); // Authentication middleware
-const { authorizeRoles } = require('../middleware/roleMiddleware'); // Authorization middleware
-const asyncHandler = require('../middleware/asyncHandler'); // Async handler for error handling
+const { protect } = require('../middleware/authMiddleware'); 
+const { authorizeRoles } = require('../middleware/roleMiddleware');
+const asyncHandler = require('../middleware/asyncHandler'); 
 
 const {
   getConfigurationsForDevice,

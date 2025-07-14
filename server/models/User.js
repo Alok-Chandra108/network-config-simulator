@@ -1,6 +1,5 @@
-// server/models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // For password hashing
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -24,8 +23,7 @@ const UserSchema = new mongoose.Schema({
     select: false // Do not return password by default in queries
   },
   roles: {
-    type: [String], // Array of strings, e.g., ['user', 'admin']
-    default: ['viewer'], // Default role for new users
+    type: [String],
     enum: ['user', 'admin', 'viewer'] // Restrict possible roles
   },
   createdAt: {
@@ -33,7 +31,7 @@ const UserSchema = new mongoose.Schema({
     default: Date.now
   }
 }, {
-  timestamps: true // Adds createdAt and updatedAt timestamps automatically
+  timestamps: true
 });
 
 // Mongoose middleware to hash the password before saving a new user or updating password

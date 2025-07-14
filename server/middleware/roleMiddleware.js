@@ -1,5 +1,5 @@
 // server/middleware/roleMiddleware.js
-const asyncHandler = require('./asyncHandler'); // Our asyncHandler middleware
+const asyncHandler = require('./asyncHandler'); 
 
 // Middleware to restrict access based on roles
 const authorizeRoles = (roles) => {

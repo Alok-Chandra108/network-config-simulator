@@ -21,14 +21,14 @@ const protect = asyncHandler(async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password');
 
       if (!req.user) {
-        res.status(401); // Unauthorized
+        res.status(401);
         throw new Error('Not authorized, user not found');
       }
 
-      next(); // Proceed to the next middleware/route handler
+      next();
     } catch (error) {
       console.error('Token verification failed:', error.message);
-      res.status(401); // Unauthorized
+      res.status(401);
       // Provide a more specific message for common token errors
       if (error.name === 'TokenExpiredError') {
         throw new Error('Not authorized, token expired');
@@ -41,7 +41,7 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    res.status(401); // Unauthorized
+    res.status(401);
     throw new Error('Not authorized, no token provided');
   }
 });

@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(storedToken);
         if (decoded.exp * 1000 < Date.now()) {
-          console.log('Token expired. Logging out...');
+          // Token expired, log out
           logout();
         } else {
           setUser({ id: decoded.id, roles: decoded.roles, username: decoded.username, email: decoded.email });
@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      console.log('Login successful:', userData.username);
       return true;
     } catch (error) {
       console.error('Login failed:', error.response?.data?.message || error.message);
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-      console.log('Registration successful:', userData.username);
       return true;
     } catch (error) {
       console.error('Registration failed:', error.response?.data?.message || error.message);
@@ -72,7 +70,6 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     delete axios.defaults.headers.common['Authorization'];
-    console.log('Logged out');
   };
 
   const authContextValue = {
@@ -84,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     register,
     isAuthenticated: !!user,
     isAdmin: user && user.roles && user.roles.includes('admin'),
-    isUser: user && user.roles && user.roles.includes('user'), // ADD THIS LINE
+    isUser: user && user.roles && user.roles.includes('user'),
     isViewer: user && user.roles && user.roles.includes('viewer'),
   };
 

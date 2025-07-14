@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'; // Import Outlet for nested routes
 import { useAuth } from './contexts/AuthContext';
-import { ToastContainer } from 'react-toastify'; // <--- NEW IMPORT 1
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import HomePage from './pages/HomePage';
@@ -11,8 +11,8 @@ import AddDevicePage from './pages/AddDevicePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
-import UnauthorizedPage from './pages/UnauthorizedPage'; // <--- NEW IMPORT
-import AdminDashboardPage from './pages/AdminDashboardPage'; 
+import UnauthorizedPage from './pages/UnauthorizedPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 
 import Header from './components/layout/Header';
@@ -20,9 +20,8 @@ import Footer from './components/layout/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 // PrivateRoute Component: Protects routes that require authentication AND specific roles
-// It will now take an 'allowedRoles' array as a prop
-const PrivateRoute = ({ allowedRoles }) => { // <--- ADD allowedRoles PROP
-  const { isAuthenticated, user, loading } = useAuth(); // <--- GET user FROM CONTEXT
+const PrivateRoute = ({ allowedRoles }) => {
+  const { isAuthenticated, user, loading } = useAuth();
 
   if (loading) {
     return <LoadingSpinner />; // Show spinner during initial authentication check
@@ -38,12 +37,12 @@ const PrivateRoute = ({ allowedRoles }) => { // <--- ADD allowedRoles PROP
     const hasRequiredRole = allowedRoles.some(role => user?.roles?.includes(role)); // Check if user has ANY of the allowed roles
     if (!hasRequiredRole) {
       // If authenticated but doesn't have the required role, redirect to unauthorized page
-      return <Navigate to="/unauthorized" replace />; // <--- NEW REDIRECT
+      return <Navigate to="/unauthorized" replace />;
     }
   }
 
   // If authenticated and has required roles (or no roles were specified for this route), render the children
-  return <Outlet />; // <--- Use Outlet for nested routes pattern
+  return <Outlet />; // Use Outlet for nested routes pattern
 };
 
 function App() {
@@ -55,7 +54,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/unauthorized" element={<UnauthorizedPage />} /> {/* <--- NEW UNAUTHORIZED ROUTE */}
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="*" element={<NotFoundPage />} />
 
           {/* Protected Routes - Now using nested routes with PrivateRoute */}
@@ -70,11 +69,10 @@ function App() {
             <Route path="/device/add" element={<AddDevicePage />} />
           </Route>
 
-          {/* Example: Admin-only route (if you add one later) */}
+          {/* Example: Admin-only route */}
           <Route element={<PrivateRoute allowedRoles={['admin']} />}>
             <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
           </Route>
-         
 
         </Routes>
       </main>

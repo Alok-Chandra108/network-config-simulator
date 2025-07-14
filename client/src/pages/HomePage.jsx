@@ -7,14 +7,14 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import io from 'socket.io-client';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import Modal from '../components/common/Modal'; 
+import Modal from '../components/common/Modal';
 
 function HomePage() {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [deviceIdToDelete, setDeviceIdToDelete] = useState(null);
-  const [deviceNameToDelete, setDeviceNameToDelete] = useState(''); 
+  const [deviceNameToDelete, setDeviceNameToDelete] = useState('');
 
   const { isAuthenticated, isAdmin, isUser, token } = useAuth();
 
@@ -51,16 +51,7 @@ function HomePage() {
 
     const socket = io('http://localhost:5000');
 
-    socket.on('connect', () => {
-      console.log('Home Page: Connected to Socket.IO server!');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Home Page: Disconnected from Socket.IO server.');
-    });
-
     socket.on('deviceStatusUpdate', (updatedDevice) => {
-      console.log('Home Page: Received device status update:', updatedDevice);
       setDevices(currentDevices =>
         currentDevices.map(device =>
           device._id === updatedDevice._id
@@ -77,11 +68,10 @@ function HomePage() {
 
     return () => {
       socket.disconnect();
-      console.log('Home Page: Socket.IO connection cleaned up.');
     };
   }, [isAuthenticated, token]);
 
-   const openDeleteConfirmModal = (id, name) => {
+  const openDeleteConfirmModal = (id, name) => {
     if (!isAdmin) {
       toast.error("You do not have permission to delete devices.");
       return;
@@ -98,12 +88,12 @@ function HomePage() {
   };
 
   const confirmDeleteDevice = async () => {
-    if (!deviceIdToDelete) return; 
+    if (!deviceIdToDelete) return;
 
     closeDeleteConfirmModal();
 
     try {
-      setLoading(true); 
+      setLoading(true);
       await deviceService.deleteDevice(deviceIdToDelete, token);
       setDevices(devices.filter(device => device._id !== deviceIdToDelete));
       toast.success(`Device "${deviceNameToDelete}" deleted successfully!`);
@@ -115,7 +105,6 @@ function HomePage() {
     }
   };
 
-  
   const handleDeleteDevice = (id, name) => {
     openDeleteConfirmModal(id, name);
   };
@@ -137,7 +126,7 @@ function HomePage() {
            >
              Add New Device
            </Link>
-         )}
+          )}
       </div>
 
       {devices.length === 0 ? (

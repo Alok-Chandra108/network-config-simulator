@@ -5,8 +5,8 @@ import deviceService from '../services/deviceService';
 import InputField from '../components/common/InputField';
 import Button from '../components/common/Button';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { useAuth } from '../contexts/AuthContext'; // Import useAuth hook
-import { toast } from 'react-toastify'; // Import toast for notifications
+import { useAuth } from '../contexts/AuthContext'; 
+import { toast } from 'react-toastify'; 
 
 function AddDevicePage() {
   const [name, setName] = useState('');

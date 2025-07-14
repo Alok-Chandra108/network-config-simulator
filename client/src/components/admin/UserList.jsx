@@ -1,10 +1,9 @@
-// client/src/components/admin/UserList.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ConfirmationModal from '../common/ConfirmationModal';
-import EditUserModal from './EditUserModal'; // <--- NEW IMPORT: EditUserModal
+import EditUserModal from './EditUserModal'; 
 import { toast } from 'react-toastify';
 
 function UserList() {
@@ -17,10 +16,8 @@ function UserList() {
   const [userToDelete, setUserToDelete] = useState(null);
   const [userToDeleteName, setUserToDeleteName] = useState('');
 
-  // <--- NEW STATES for EditUserModal ---
   const [showEditModal, setShowEditModal] = useState(false);
-  const [userToEdit, setUserToEdit] = useState(null); // Stores the full user object to edit
-  // ------------------------------------
+  const [userToEdit, setUserToEdit] = useState(null); 
 
   // Effect to fetch users
   useEffect(() => {
@@ -52,25 +49,24 @@ function UserList() {
   }, [token]);
 
   // Function to open the Edit User Modal
-  const handleEdit = (user) => { // <--- Now takes the full user object
+  const handleEdit = (user) => { 
     setUserToEdit(user);
     setShowEditModal(true);
   };
 
   // Function to handle update from EditUserModal
   const handleUserUpdated = (updatedUserData) => {
-    // Find the updated user in the current list and replace it
     setUsers(users.map(user =>
       user._id === updatedUserData._id ? updatedUserData : user
     ));
-    setShowEditModal(false); // Close modal
-    setUserToEdit(null); // Clear the user being edited
+    setShowEditModal(false); 
+    setUserToEdit(null); 
   };
 
   // Function to close the Edit User Modal
   const handleCloseEditModal = () => {
     setShowEditModal(false);
-    setUserToEdit(null); // Clear the user being edited
+    setUserToEdit(null); 
   };
 
 
@@ -83,7 +79,7 @@ function UserList() {
 
     setUserToDelete(userId);
     setUserToDeleteName(username);
-    setShowConfirmModal(true); // Open the confirmation modal
+    setShowConfirmModal(true); 
   };
 
   // Function to handle confirmation from the delete modal
@@ -154,7 +150,7 @@ function UserList() {
                   <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">{new Date(user.createdAt).toLocaleDateString()}</td>
                   <td className="py-4 px-6 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => handleEdit(user)} // <--- Pass the entire user object
+                      onClick={() => handleEdit(user)} 
                       className="text-indigo-600 hover:text-indigo-900 mr-4"
                     >Edit</button>
                     {user._id !== currentUser.id && (
@@ -171,7 +167,6 @@ function UserList() {
         </div>
       )}
 
-      {/* Confirmation Modal for Deletion */}
       <ConfirmationModal
         show={showConfirmModal}
         message={`Are you sure you want to delete user "${userToDeleteName}"? This action cannot be undone.`}
@@ -181,16 +176,14 @@ function UserList() {
         cancelText="Cancel"
       />
 
-      {/* <--- NEW: Edit User Modal --- */}
-      {userToEdit && ( // Only render if there's a user to edit
+      {userToEdit && (
         <EditUserModal
           show={showEditModal}
           onClose={handleCloseEditModal}
-          user={userToEdit} // Pass the user object to the modal
-          onUserUpdated={handleUserUpdated} // Callback for when user is updated
+          user={userToEdit} 
+          onUserUpdated={handleUserUpdated} 
         />
       )}
-      {/* --------------------------- */}
     </div>
   );
 }

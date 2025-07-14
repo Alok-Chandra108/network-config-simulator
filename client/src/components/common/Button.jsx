@@ -1,4 +1,3 @@
-// client/src/components/common/Button.jsx
 import React from 'react';
 
 // Destructure 'className' from props to handle it explicitly, renaming it to avoid conflict

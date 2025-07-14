@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 
 function UnauthorizedPage() {
   return (
-    // Outer container to center the content vertically and horizontally,
-    // taking full viewport height and applying responsive padding.
+
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-      {/* Inner card-like container for the Unauthorized message */}
       <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 text-center max-w-lg w-full">
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-red-600 mb-4 animate-pulse">
           403
@@ -24,7 +22,7 @@ function UnauthorizedPage() {
                      px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl
                      shadow-lg hover:bg-blue-700 hover:shadow-xl
                      transition duration-300 transform hover:-translate-y-0.5
-                     text-base sm:text-lg whitespace-nowrap" // Adjusted for Button-like styling
+                     text-base sm:text-lg whitespace-nowrap" 
         >
           Go to Homepage
         </Link>

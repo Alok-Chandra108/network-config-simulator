@@ -1,14 +1,12 @@
-// client/src/components/admin/EditUserModal.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 
-// Define all possible roles your application uses
-const ALL_ROLES = ['admin', 'user', 'viewer']; // Adjust these based on your actual roles
+const ALL_ROLES = ['admin', 'user', 'viewer'];
 
 function EditUserModal({ show, onClose, user, onUserUpdated }) {
-  const { token, user: currentUser } = useAuth(); // Get current user for self-edit checks
+  const { token, user: currentUser } = useAuth(); 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -17,7 +15,6 @@ function EditUserModal({ show, onClose, user, onUserUpdated }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Populate form data when the modal is shown or user prop changes
     if (show && user) {
       setFormData({
         username: user.username,

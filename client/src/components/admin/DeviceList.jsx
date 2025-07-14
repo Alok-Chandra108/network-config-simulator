@@ -1,4 +1,3 @@
-// client/src/components/admin/DeviceList.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -11,7 +10,7 @@ import deviceService from '../../services/deviceService';
 import userService from '../../services/userService';
 
 function DeviceList() {
-  const { token, isAdmin } = useAuth(); // Get token and isAdmin from auth context
+  const { token, isAdmin } = useAuth(); 
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +20,7 @@ function DeviceList() {
 
   const [showAddDeviceModal, setShowAddDeviceModal] = useState(false);
   const [showEditDeviceModal, setShowEditDeviceModal] = useState(false);
-  const [deviceToEdit, setDeviceToEdit] = useState(null); // Holds the device object being edited
+  const [deviceToEdit, setDeviceToEdit] = useState(null); 
   const [allUsers, setAllUsers] = useState([]); 
 
   // Function to fetch all devices and all users
@@ -179,7 +178,6 @@ function DeviceList() {
                   <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">{device.ipAddress || 'N/A'}</td>
                   <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">{device.location || 'N/A'}</td>
                   <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">
-                    {/* Display owner's username and email if available */}
                     {device.owner ? `${device.owner.username} (${device.owner.email})` : 'N/A'}
                   </td>
                   <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">

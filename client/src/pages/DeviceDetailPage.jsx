@@ -39,7 +39,6 @@ function DeviceDetailPage() {
     try {
       if (!device) setLoading(true);
 
-      // Pass token to getDeviceById
       const fetchedDevice = await deviceService.getDeviceById(id, token);
       if (!fetchedDevice) {
         toast.error('Device not found. Please check the ID.');
@@ -82,16 +81,7 @@ function DeviceDetailPage() {
 
     const socket = io('http://localhost:5000');
 
-    socket.on('connect', () => {
-      console.log('Detail Page: Connected to Socket.IO server!');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Detail Page: Disconnected from Socket.IO server.');
-    });
-
     socket.on('deviceStatusUpdate', (updatedDevice) => {
-      console.log('Detail Page: Received device status update:', updatedDevice);
       if (updatedDevice._id === id) {
         setDevice(prevDevice => {
           if (!prevDevice) {
@@ -111,9 +101,8 @@ function DeviceDetailPage() {
 
     return () => {
       socket.disconnect();
-      console.log('Detail Page: Socket.IO connection cleaned up.');
     };
-  }, [id, isAuthenticated, token]); 
+  }, [id, isAuthenticated, token]);
 
   const handlePushNewConfig = async (e) => {
     e.preventDefault();
@@ -133,11 +122,10 @@ function DeviceDetailPage() {
     }
 
     try {
-      // Pass token to createConfiguration
       await configurationService.createConfiguration(id, { content: newConfigContent }, token);
       toast.success('New configuration pushed successfully!');
       setNewConfigContent('');
-      await fetchDeviceAndConfigs(); 
+      await fetchDeviceAndConfigs();
     } catch (err) {
       console.error('Error pushing new configuration:', err.response?.data?.message || err.message);
       toast.error(err.response?.data?.message || 'Failed to push configuration.');
@@ -158,7 +146,7 @@ function DeviceDetailPage() {
         setIsSubmitting(true);
         await configurationService.setCurrentConfiguration(id, configId, token);
         toast.success('Configuration successfully set as current!');
-        await fetchDeviceAndConfigs(); 
+        await fetchDeviceAndConfigs();
       } catch (err) {
         console.error('Error setting current configuration:', err.response?.data?.message || err.message);
         toast.error(err.response?.data?.message || 'Failed to set current configuration.');
@@ -180,7 +168,6 @@ function DeviceDetailPage() {
 
     setIsCheckingStatus(true);
     try {
-      // Pass token to checkDeviceStatus
       const updatedStatus = await deviceService.checkDeviceStatus(id, token);
       setDevice(prevDevice => ({
         ...prevDevice,

@@ -39,8 +39,8 @@ router.post('/register', asyncHandler(async (req, res) => {
   user = new User({
     username,
     email,
-    password, // The pre-save hook will hash this
-    roles: ['viewer'] // Assign default 'user' role
+    password,
+    roles: ['viewer'] // Assign default 'viewer' role
   });
 
   await user.save();

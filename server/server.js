@@ -48,10 +48,8 @@ app.use('/api/users', userRoutes);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
-
     socket.on('disconnect', () => {
-        console.log(`User disconnected: ${socket.id}`);
+        // No console.log for disconnect, as per request
     });
 });
 
@@ -75,11 +73,9 @@ const startApplication = async () => {
     try {
         // Connect to MongoDB and WAIT for it to complete
         await connectDB();
-        console.log('MongoDB connection successfully established.'); // Optional: confirm connection here
 
         // Start the HTTP server (which Socket.IO is attached to)
         server.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
             // Start the scheduler AFTER the server is fully listening and DB is connected
             startDeviceStatusScheduler(io);
         });

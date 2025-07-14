@@ -23,7 +23,7 @@ function Modal({ children, isOpen, onClose, title }) {
         </div>
       </div>
     </div>,
-    document.getElementById('modal-root') // This target element needs to exist in your index.html
+    document.getElementById('modal-root') 
   );
 }
 

@@ -1,31 +1,29 @@
-// client/src/components/admin/AddDeviceModal.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import LoadingSpinner from '../common/LoadingSpinner'; // Assuming you have this component
+import LoadingSpinner from '../common/LoadingSpinner'; 
 
-// Define all possible device types (should match your Device model enum)
-const ALL_DEVICE_TYPES = ['Router', 'Switch', 'Firewall', 'Load Balancer', 'Server', 'Other']; // Added some from your schema
+
+const ALL_DEVICE_TYPES = ['Router', 'Switch', 'Firewall', 'Load Balancer', 'Server', 'Other']; 
 
 function AddDeviceModal({ show, onClose, onDeviceAdded }) {
     const { token } = useAuth();
     const [formData, setFormData] = useState({
         name: '',
-        type: ALL_DEVICE_TYPES[0], // Default to the first type
+        type: ALL_DEVICE_TYPES[0], 
         ipAddress: '',
         location: '',
         description: '',
-        owner: '', // To store the selected owner's ID
+        owner: '', 
     });
-    const [users, setUsers] = useState([]); // To store the list of users for the owner dropdown
+    const [users, setUsers] = useState([]); 
     const [loading, setLoading] = useState(false);
     const [usersLoading, setUsersLoading] = useState(true);
 
-    // Effect to fetch all users for the owner dropdown
     useEffect(() => {
         const fetchUsers = async () => {
-            if (!show) return; // Only fetch when modal is shown
+            if (!show) return; 
 
             try {
                 setUsersLoading(true);
@@ -34,18 +32,18 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                         Authorization: `Bearer ${token}`,
                     },
                 };
-                const response = await axios.get('/api/users', config); // Get all users
+                const response = await axios.get('/api/users', config); 
                 setUsers(response.data);
                 // Set the first user as default owner if available, otherwise clear owner
                 if (response.data.length > 0) {
                     setFormData((prevData) => ({
                         ...prevData,
-                        owner: response.data[0]._id, // Set first user as default owner
+                        owner: response.data[0]._id, 
                     }));
                 } else {
                     setFormData((prevData) => ({
                         ...prevData,
-                        owner: '', // Clear owner if no users available
+                        owner: '', 
                     }));
                 }
             } catch (err) {
@@ -78,8 +76,8 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
 
             const response = await axios.post('/api/devices', formData, config);
             toast.success(`Device "${response.data.name}" added successfully!`);
-            onDeviceAdded(response.data); // Notify parent component (DeviceList)
-            onClose(); // Close the modal
+            onDeviceAdded(response.data); 
+            onClose(); 
             // Reset form for next use
             setFormData({
                 name: '',
@@ -87,7 +85,7 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                 ipAddress: '',
                 location: '',
                 description: '',
-                owner: users.length > 0 ? users[0]._id : '', // Reset to default owner
+                owner: users.length > 0 ? users[0]._id : '', 
             });
         } catch (err) {
             console.error('Error adding device:', err.response?.data?.message || err.message);
@@ -110,7 +108,6 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
-                            {/* Column 1 */}
                             <div>
                                 <div className="mb-4">
                                     <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
@@ -161,7 +158,6 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                                 </div>
                             </div>
 
-                            {/* Column 2 */}
                             <div>
                                 <div className="mb-4">
                                     <label htmlFor="location" className="block text-gray-700 text-sm font-bold mb-2">
@@ -190,7 +186,7 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm sm:text-base"
                                     ></textarea>
                                 </div>
-                                <div className="mb-4"> {/* Adjusted margin bottom to align with others */}
+                                <div className="mb-4"> 
                                     <label htmlFor="owner" className="block text-gray-700 text-sm font-bold mb-2">
                                         Owner
                                     </label>
@@ -216,8 +212,7 @@ function AddDeviceModal({ show, onClose, onDeviceAdded }) {
                             </div>
                         </div>
 
-                        {/* Buttons outside the grid to maintain alignment */}
-                        <div className="flex justify-end space-x-2 sm:space-x-3 mt-6"> {/* Adjusted spacing and margin-top */}
+                        <div className="flex justify-end space-x-2 sm:space-x-3 mt-6">
                             <button
                                 type="button"
                                 onClick={onClose}

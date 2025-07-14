@@ -3,8 +3,8 @@ import React from 'react';
 
 function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-4 mt-12 shadow-inner text-sm">
-      <div className="container mx-auto text-center opacity-80">
+    <footer className="bg-white shadow-md py-4 px-4 sm:px-6 lg:px-8 mt-12">
+      <div className="container mx-auto text-center text-gray-700 opacity-80">
         &copy; {new Date().getFullYear()} Network Sim Pro. All rights reserved.
       </div>
     </footer>

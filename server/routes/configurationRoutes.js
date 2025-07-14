@@ -6,9 +6,9 @@ const {
   // Only include functions that operate on configurations standalone
   getConfigurationById,
 } = require('../controllers/configurationController');
-const { protect } = require('../middleware/authMiddleware'); // Authentication middleware
-const { authorizeRoles } = require('../middleware/roleMiddleware'); // Authorization middleware
-const asyncHandler = require('../middleware/asyncHandler'); // Async handler for error handling
+const { protect } = require('../middleware/authMiddleware'); 
+const { authorizeRoles } = require('../middleware/roleMiddleware');
+const asyncHandler = require('../middleware/asyncHandler');
 
 
 // Route for getting a single configuration by its own ID (standalone)

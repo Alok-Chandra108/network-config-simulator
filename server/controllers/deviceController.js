@@ -19,7 +19,6 @@ const pingHost = (ipAddress) => {
       let latency = null;
 
       if (stdout) {
-        // console.log(`Ping stdout for ${ipAddress}:\n${stdout}`); // Keep for debugging if needed
         if (stdout.includes('bytes from') || stdout.includes('TTL=')) {
           isOnline = true;
           const match = stdout.match(/time=(\d+(\.\d+)?) ?ms/);
@@ -48,7 +47,7 @@ const pingHost = (ipAddress) => {
 // @access  Private (All authenticated users get all devices)
 const getDevices = asyncHandler(async (req, res) => {
   try {
-    // Removed owner filtering: All authenticated users can now see all devices
+    // All authenticated users can now see all devices
     const devices = await Device.find({})
       .populate('owner', 'username email') // Populate owner for display
       .populate('currentConfiguration', 'version createdAt content'); // Populate current configuration for display
@@ -71,10 +70,7 @@ const getDeviceById = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Device not found' });
     }
 
-    // Removed authorization check: All authenticated users can now view any device details
-    // if (!req.user.roles.includes('admin') && device.owner.toString() !== req.user.id.toString()) {
-    //   return res.status(403).json({ message: 'Not authorized to access this device.' });
-    // }
+    // All authenticated users can now view any device details
 
     res.status(200).json(device);
   } catch (error) {
@@ -262,10 +258,7 @@ const checkDeviceStatus = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Device not found' });
     }
 
-    // Removed authorization check: All authenticated users can now check status of any device
-    // if (!req.user.roles.includes('admin') && device.owner.toString() !== req.user.id.toString()) {
-    //   return res.status(403).json({ message: 'Not authorized to check status of this device.' });
-    // }
+    // All authenticated users can now check status of any device
 
     if (!device.ipAddress) {
       return res.status(400).json({ message: 'Device does not have an IP address configured for status check.' });

@@ -25,7 +25,6 @@ function EditDeviceModal({ isOpen, onClose, deviceToEdit, onSave, users }) {
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  // Effect to populate form data when a deviceToEdit is provided or changes
   useEffect(() => {
     if (deviceToEdit) {
       setFormData({
@@ -37,7 +36,6 @@ function EditDeviceModal({ isOpen, onClose, deviceToEdit, onSave, users }) {
         owner: deviceToEdit.owner?._id || '', 
       });
     } else {
-      // Clear form when no device is being edited 
       setFormData({
         name: '',
         type: '',
@@ -61,7 +59,6 @@ function EditDeviceModal({ isOpen, onClose, deviceToEdit, onSave, users }) {
     e.preventDefault();
     setIsSaving(true);
 
-    // Basic client-side validation
     if (!formData.name.trim() || !formData.type.trim()) {
       toast.error('Device name and type are required.');
       setIsSaving(false);
@@ -78,7 +75,6 @@ function EditDeviceModal({ isOpen, onClose, deviceToEdit, onSave, users }) {
     };
 
     try {
-      // Call the onSave prop, passing the device ID and the updated data
       await onSave(deviceToEdit._id, dataToSave);
       onClose(); 
     } catch (error) {
